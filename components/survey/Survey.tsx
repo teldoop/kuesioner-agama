@@ -23,6 +23,36 @@ export default function Survey({ settings, questions }: { settings: Settings; qu
   const sid = useRef(''); const startedAt = useRef(0); const hp = useRef<HTMLInputElement>(null);
   const stage = useRef<HTMLDivElement>(null);
 
+  // Lanjut / Kirim saat menekan tombol Enter (kecuali sedang di input multibaris / textarea)
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key !== 'Enter' || e.shiftKey || e.ctrlKey || e.altKey || e.metaKey) return;
+
+      const el = document.activeElement as HTMLElement | null;
+      const tag = el?.tagName;
+
+      // Hanya blokir jika fokus di textarea (multibaris), select, atau elemen contentEditable
+      if (tag === 'TEXTAREA' || tag === 'SELECT' || el?.isContentEditable) return;
+
+      // Hindari double-trigger jika fokus memang sedang di tombol navigasi utama (Kembali / Lanjut / Kirim)
+      if (tag === 'BUTTON' && el?.closest('[data-nav-actions]')) return;
+
+      if (step === 0) {
+        e.preventDefault();
+        start();
+      } else if (step >= 1 && step < END) {
+        const currentQ = questions[step - 1];
+        if (!currentQ || !isAnswered(currentQ, answers[currentQ.id]) || busy) return;
+        e.preventDefault();
+        if (step === n) submit();
+        else setStep((s) => s + 1);
+      }
+    };
+
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [step, answers, busy, n, END, questions]);
+
   // Sesi hanya hidup di memori halaman ini (tidak disimpan di browser)
   useEffect(() => { sid.current = crypto.randomUUID(); }, []);
 

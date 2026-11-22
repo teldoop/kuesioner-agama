@@ -13,7 +13,7 @@ export default function SharePanel({ title, description }: { title: string; desc
     setCopied(true); setTimeout(() => setCopied(false), 2000);
   };
   return (
-    <section className="nb-card p-4 sm:p-5 space-y-5 bg-yellow-100">
+    <section className="nb-card p-4 sm:p-5 space-y-5 bg-yellow-100 dark:bg-white dark:text-black">
       <h2 className="text-lg font-extrabold uppercase">Bagikan Kuesioner Ini</h2>
       <div className="grid md:grid-cols-2 gap-5 items-start">
         <div className="space-y-3">

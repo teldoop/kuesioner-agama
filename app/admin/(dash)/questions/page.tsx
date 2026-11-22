@@ -47,7 +47,7 @@ export default function Questions() {
   return (
     <div className="space-y-6">
       {msg && <div role="status" className="fixed top-20 right-3 left-3 sm:left-auto bg-black text-white font-bold border-[3px] border-black shadow-[4px_4px_0_0_#a3e635] px-4 py-2 z-30">{msg}</div>}
-      <section className="nb-card p-4 space-y-3 bg-yellow-100">
+      <section className="nb-card p-4 space-y-3 bg-yellow-100 dark:bg-white dark:text-black">
         <h2 className="font-extrabold uppercase">Pengaturan Umum</h2>
         <Field label="Judul kuesioner" hint="Tampil di halaman pembuka, judul tab, dan kartu saat tautan dibagikan."><input className={inp} value={st.title} onChange={(e) => setSt({ ...st, title: e.target.value })} /></Field>
         <Field label="Deskripsi halaman pembuka" hint="Dipakai juga sebagai deskripsi kartu saat tautan dibagikan (disarankan maksimal 160 karakter)."><textarea className={inp} rows={3} value={st.description} onChange={(e) => setSt({ ...st, description: e.target.value })} /></Field>

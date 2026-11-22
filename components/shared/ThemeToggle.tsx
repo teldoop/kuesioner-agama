@@ -25,7 +25,7 @@ export default function ThemeToggle({ className = '' }: { className?: string }) 
       className={`inline-flex border-[3px] border-black bg-white shadow-[3px_3px_0_0_var(--ink-c)] ${className}`}>
       {OPTS.map(([k, label, Icon]) => (
         <button key={k} role="radio" aria-checked={mode === k} aria-label={label} title={label} onClick={() => pick(k)}
-          className={`p-2 transition-opacity ${mode === k ? 'bg-yellow-300' : 'hover:opacity-60'}`}>
+          className={`p-2 transition-opacity dark:text-black ${mode === k ? 'bg-yellow-300' : 'hover:opacity-60'}`}>
           <Icon size={16} strokeWidth={3} />
         </button>
       ))}

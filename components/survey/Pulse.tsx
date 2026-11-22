@@ -12,7 +12,7 @@ export default function Pulse() {
   if (!s || s.error || !s.questions?.length) return null; // hanya tampil jika admin mengaktifkannya pada pertanyaan
   return (
     <div className="nb-card p-5 space-y-5 text-left">
-      <p className="font-extrabold uppercase flex items-center gap-2"><Radio size={20} strokeWidth={3} /> Hasil Komunitas
+      <p className="font-extrabold uppercase flex items-center gap-2"><Radio size={20} strokeWidth={3} /> Hasil Responden Lain
         <span className="nb-tag !bg-lime-300 ml-auto">{s.total} responden</span></p>
       {s.questions.map((q: any, qi: number) => {
         const entries = Object.entries(q.counts as Record<string, number>);

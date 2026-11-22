@@ -6,6 +6,7 @@ import { analyze } from '@/lib/analytics';
 import { applyLive, useResponsesLive } from '@/lib/useResponsesLive';
 import { TYPE_LABEL, type Question, type ResponseRow, type Settings } from '@/lib/types';
 import BarBox from '@/components/admin/BarBox';
+import PieBox from '@/components/admin/PieBox';
 import LiveBadge from '@/components/admin/LiveBadge';
 import SharePanel from '@/components/admin/SharePanel';
 
@@ -54,8 +55,13 @@ export default function Dashboard() {
           </div>
           {s.note && <p className="text-xs font-semibold">{s.note}</p>}
           {s.charts.length > 0 && (
-            <div className="grid md:grid-cols-2 gap-4">
-              {s.charts.map((c, k) => <BarBox key={k} title={c.title} data={c.data} unit={c.unit ?? ''} color={COLORS[i % COLORS.length]} />)}
+            <div className="grid gap-4">
+              {s.charts.map((c, k) => (
+                <div key={k} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <BarBox title={c.title} data={c.data} unit={c.unit ?? ''} color={COLORS[i % COLORS.length]} />
+                  <PieBox title={`Persentase`} data={c.data} unit={c.unit ?? ''} />
+                </div>
+              ))}
             </div>
           )}
           {s.texts.length > 0 && (

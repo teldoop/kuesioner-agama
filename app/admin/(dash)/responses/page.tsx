@@ -26,28 +26,30 @@ export default function Responses() {
   });
   const del = async (id: string) => { if (confirm('Hapus data ini?')) { await sb.from('survey_responses').delete().eq('id', id); setOpen(null); load(); } };
   return (
-    <div className="space-y-5">
-      <div className="flex flex-wrap items-center gap-3">
-        <div className="mr-auto flex items-center gap-3"><h1 className="font-extrabold uppercase text-xl">{rows.length} responden</h1><LiveBadge status={status} /></div>
-        <button onClick={() => downloadCsv(toCsv(rows, qs), `kuesioner-${new Date().toISOString().slice(0, 10)}.csv`)} className="nb-btn nb-btn-sm !bg-lime-300"><Download size={16} strokeWidth={3} /> Export CSV / Excel</button>
-      </div>
-      <div className="nb-card overflow-x-auto">
-        <table className="w-full text-sm">
-          <thead className="bg-black text-white text-left uppercase"><tr>{['Waktu', 'Durasi', ''].map((h) => <th key={h} className="px-3 py-2 font-extrabold">{h}</th>)}</tr></thead>
-          <tbody>
-            {rows.map((r) => (
-              <tr key={r.id} className={`border-t-[3px] border-black transition-colors ${fresh.includes(r.id) ? 'bg-lime-200' : ''}`}>
-                <td className="px-3 py-2 whitespace-nowrap font-semibold">{new Date(r.created_at).toLocaleString('id-ID')}</td>
-                <td className="px-3 py-2 font-bold">{r.duration_seconds} dtk</td>
-                <td className="px-3 py-2 whitespace-nowrap text-right space-x-2">
-                  <button onClick={() => setOpen(r)} className="nb-btn nb-btn-sm !bg-yellow-300"><Eye size={14} strokeWidth={3} /> Detail</button>
-                  <button onClick={() => del(r.id)} className="nb-btn nb-btn-sm !bg-red-300" aria-label="Hapus"><Trash2 size={14} strokeWidth={3} /></button>
-                </td>
-              </tr>
-            ))}
-            {!rows.length && <tr><td colSpan={3} className="px-3 py-8 text-center font-bold">Belum ada jawaban</td></tr>}
-          </tbody>
-        </table>
+    <>
+      <div className="space-y-5">
+        <div className="flex flex-wrap items-center gap-3">
+          <div className="mr-auto flex items-center gap-3"><h1 className="font-extrabold uppercase text-xl">{rows.length} responden</h1><LiveBadge status={status} /></div>
+          <button onClick={() => downloadCsv(toCsv(rows, qs), `kuesioner-${new Date().toISOString().slice(0, 10)}.csv`)} className="nb-btn nb-btn-sm !bg-lime-300"><Download size={16} strokeWidth={3} /> Export CSV / Excel</button>
+        </div>
+        <div className="nb-card overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead className="bg-black text-white text-left uppercase"><tr>{['Waktu', 'Durasi', ''].map((h) => <th key={h} className="px-3 py-2 font-extrabold">{h}</th>)}</tr></thead>
+            <tbody>
+              {rows.map((r) => (
+                <tr key={r.id} className={`border-t-[3px] border-black transition-colors ${fresh.includes(r.id) ? 'bg-lime-200' : ''}`}>
+                  <td className="px-3 py-2 whitespace-nowrap font-semibold">{new Date(r.created_at).toLocaleString('id-ID')}</td>
+                  <td className="px-3 py-2 font-bold">{r.duration_seconds} dtk</td>
+                  <td className="px-3 py-2 whitespace-nowrap text-right space-x-2">
+                    <button onClick={() => setOpen(r)} className="nb-btn nb-btn-sm !bg-yellow-300"><Eye size={14} strokeWidth={3} /> Detail</button>
+                    <button onClick={() => del(r.id)} className="nb-btn nb-btn-sm !bg-red-300" aria-label="Hapus"><Trash2 size={14} strokeWidth={3} /></button>
+                  </td>
+                </tr>
+              ))}
+              {!rows.length && <tr><td colSpan={3} className="px-3 py-8 text-center font-bold">Belum ada jawaban</td></tr>}
+            </tbody>
+          </table>
+        </div>
       </div>
       {open && (
         <div className="fixed inset-0 bg-neutral-950/60 flex items-end md:items-center justify-center p-3 z-20" onClick={() => setOpen(null)}>
@@ -62,6 +64,6 @@ export default function Responses() {
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 }

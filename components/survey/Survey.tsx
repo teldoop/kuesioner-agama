@@ -89,7 +89,7 @@ export default function Survey({ settings, questions }: { settings: Settings; qu
             {settings.description && <p>{settings.description}</p>}
             <div className="flex flex-wrap gap-2">
               <span className="nb-tag !bg-yellow-300"><Clock size={14} strokeWidth={3} /> ±{settings.estimated_minutes} menit</span>
-              <span className="nb-tag !bg-lime-300"><ShieldCheck size={14} strokeWidth={3} /> Anonim, tanpa login</span>
+              <span className="nb-tag !bg-lime-300"><ShieldCheck size={14} strokeWidth={3} /> Data Anda bersifat anonim</span>
             </div>
             <button onClick={start} className="nb-btn w-full text-lg">Mulai <ArrowRight size={20} strokeWidth={3} /></button>
           </div>
@@ -106,14 +106,14 @@ export default function Survey({ settings, questions }: { settings: Settings; qu
           <div className="space-y-5">
             {result && ResIcon && (
               <div className="nb-card p-6 text-center space-y-4 bg-lime-200">
-                <div className="inline-flex border-[3px] border-black bg-white p-4 shadow-[4px_4px_0_0_var(--ink-c)]"><ResIcon size={48} strokeWidth={2.5} /></div>
-                <p className="text-xs font-extrabold uppercase">Hasilmu</p>
+                <div className="inline-flex border-[3px] border-black bg-white dark:text-black p-4 shadow-[4px_4px_0_0_var(--ink-c)]"><ResIcon size={48} strokeWidth={2.5} /></div>
+                <p className="text-xs font-extrabold uppercase">Hasil Anda</p>
                 <h2 className="text-3xl font-extrabold uppercase leading-none">{result.name}</h2>
                 {result.description && <p>{result.description}</p>}
               </div>
             )}
             <Pulse />
-            <p className="text-sm font-bold text-center flex items-center justify-center gap-2">Terima kasih sudah berpartisipasi <Heart size={16} strokeWidth={3} /></p>
+            <p className="text-sm font-bold text-center flex items-center justify-center gap-2">Makasih udh bantu ngisi kuesioner ini! <Heart size={16} strokeWidth={3} /></p>
           </div>
         )}
       </div>

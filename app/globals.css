@@ -1,0 +1,41 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root { --ink: 0 0 0; --paper: 255 255 255; --ink-c: #000; --paper-c: #fff; --canvas: #FFF4D6; --dot: #00000022; }
+  .dark { --ink: 245 245 245; --paper: 30 30 33; --ink-c: #f5f5f5; --paper-c: #1e1e21; --canvas: #121214; --dot: #ffffff1a; color-scheme: dark; }
+}
+body {
+  @apply text-black antialiased font-medium;
+  background-color: var(--canvas);
+  background-image: radial-gradient(var(--dot) 1.2px, transparent 1.2px);
+  background-size: 18px 18px;
+}
+@layer components {
+  .nb-card { @apply bg-white border-[3px] border-black shadow-[6px_6px_0_0_var(--ink-c)]; }
+  .nb-btn {
+    @apply inline-flex items-center justify-center gap-2 border-[3px] border-black bg-yellow-300 px-5 py-2.5 font-extrabold uppercase tracking-tight
+      shadow-[4px_4px_0_0_var(--ink-c)] transition-all hover:bg-yellow-200 active:translate-x-[4px] active:translate-y-[4px] active:shadow-none
+      disabled:opacity-40 disabled:pointer-events-none;
+  }
+  .nb-btn-sm { @apply px-3 py-1.5 text-xs shadow-[3px_3px_0_0_var(--ink-c)] active:translate-x-[3px] active:translate-y-[3px]; }
+  .nb-opt {
+    @apply w-full flex items-center justify-between gap-3 text-left border-[3px] border-black bg-white px-4 py-3 font-bold
+      shadow-[3px_3px_0_0_var(--ink-c)] transition-all hover:bg-lime-200 active:translate-x-[3px] active:translate-y-[3px] active:shadow-none;
+  }
+  .nb-input { color: rgb(var(--ink)); @apply border-[3px] border-black bg-white px-3 py-2 font-semibold focus:outline-none focus:shadow-[4px_4px_0_0_var(--ink-c)]; }
+  .nb-tag { @apply inline-flex items-center gap-1 border-2 border-black bg-pink-300 px-2 py-0.5 text-xs font-extrabold uppercase; }
+}
+input[type='range'] { -webkit-appearance: none; appearance: none; width: 100%; height: 14px; background: var(--paper-c); border: 3px solid var(--ink-c); }
+input[type='range']::-webkit-slider-thumb { -webkit-appearance: none; width: 26px; height: 26px; background: #facc15; border: 3px solid var(--ink-c); box-shadow: 3px 3px 0 var(--ink-c); cursor: grab; }
+input[type='range']::-moz-range-thumb { width: 22px; height: 22px; background: #facc15; border: 3px solid var(--ink-c); border-radius: 0; box-shadow: 3px 3px 0 var(--ink-c); cursor: grab; }
+.hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+
+/* Teks di atas warna cerah selalu gelap, termasuk pada mode gelap */
+.nb-btn, .nb-tag { color: #000; }
+.nb-btn[class*='bg-white'] { color: rgb(var(--ink)); }
+.dark [class*='bg-yellow-'], .dark [class*='bg-lime-'], .dark [class*='bg-pink-'], .dark [class*='bg-red-'],
+.dark [class*='bg-sky-'], .dark [class*='bg-orange-'], .dark [class*='bg-green-'] { color: #000; }
+.dark .nb-opt:hover { color: #000; }
+.dark .text-red-700 { color: #fca5a5; }

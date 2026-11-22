@@ -15,7 +15,7 @@ export default function ResultTypesEditor({ types, onChange }: { types: ResultTy
         Jika tidak ada tipe atau tidak ada pertanyaan yang dihitung, bagian ini tidak tampil.
       </p>
       {types.map((t, i) => {
-        const Icon = (RESULT_ICONS[t.icon] ?? RESULT_ICONS.star).Icon;
+        const Icon = (RESULT_ICONS[t.icon] ?? RESULT_ICONS.sprout).Icon;
         return (
           <div key={t.id} className="border-[3px] border-black bg-white p-3 space-y-3">
             <div className="flex flex-wrap items-center gap-2">

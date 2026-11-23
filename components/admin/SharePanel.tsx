@@ -29,7 +29,7 @@ export default function SharePanel({ title, description }: { title: string; desc
           }}
           unoptimized // Opsional: tambahkan jika "/og" adalah endpoint dinamis (Route Handler) seperti @vercel/og
         />
-        <div className="p-3 space-y-1">
+        <div className="p-3 md:p-5 space-y-1">
           <p className="text-xs font-bold uppercase opacity-70">{SITE_NAME} · {host}</p>
           <p className="font-extrabold leading-snug">{title || SITE_NAME}</p>
           {description && <p className="text-sm font-medium line-clamp-3 md:line-clamp-none">{description}</p>}

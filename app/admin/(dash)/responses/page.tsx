@@ -2,17 +2,21 @@
 import { useEffect, useState } from 'react';
 import { Download, Eye, Trash2 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
-import { downloadCsv, toCsv } from '@/lib/export';
+import { buildCsv, downloadCsv, type CsvDelimiter } from '@/lib/export';
 import { TYPE_LABEL, type Question, type ResponseRow } from '@/lib/types';
 import LiveBadge from '@/components/admin/LiveBadge';
 import ResponseDetail from '@/components/admin/ResponseDetail';
+import { useConfirm } from '@/components/shared/ConfirmDialog';
 import { applyLive, useResponsesLive } from '@/lib/useResponsesLive';
 
 export default function Responses() {
   const sb = createClient();
+  const { confirm: ask, dialog } = useConfirm();
   const [rows, setRows] = useState<ResponseRow[]>([]); const [qs, setQs] = useState<Question[]>([]);
   const [openId, setOpenId] = useState<string | null>(null);
   const [fresh, setFresh] = useState<string[]>([]);
+  const [sep, setSep] = useState<CsvDelimiter>(';');
+  const [note, setNote] = useState('');
   const load = async () => {
     const [r, q] = await Promise.all([
       sb.from('survey_responses').select('*').order('created_at', { ascending: false }).limit(5000),
@@ -29,8 +33,21 @@ export default function Responses() {
   const idx = openId ? rows.findIndex((r) => r.id === openId) : -1;
   useEffect(() => { if (openId && idx === -1 && rows.length) setOpenId(null); }, [openId, idx, rows.length]); // data yang dibuka sudah terhapus
 
+  const exportCsv = () => {
+    const r = buildCsv(rows, qs, sep);
+    const d = new Date(), p = (n: number) => String(n).padStart(2, '0');
+    downloadCsv(r.csv, `kuesioner-${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}-${p(d.getHours())}${p(d.getMinutes())}.csv`);
+    setNote(`Diekspor: ${r.responses} responden, ${r.questions} pertanyaan, ${r.columns} kolom`);
+    setTimeout(() => setNote(''), 6000);
+  };
+
   const del = async (id: string) => {
-    if (!confirm('Hapus jawaban ini? Tindakan ini tidak bisa dibatalkan.')) return;
+    const ok = await ask({
+      title: 'Hapus jawaban ini?',
+      message: 'Jawaban responden ini akan dihapus permanen dan tidak bisa dikembalikan.',
+      confirmLabel: 'Hapus', danger: true,
+    });
+    if (!ok) return;
     const i = rows.findIndex((r) => r.id === id);
     const next = rows[i + 1]?.id ?? rows[i - 1]?.id ?? null; // setelah dihapus, lanjut ke jawaban di sebelahnya
     const { error } = await sb.from('survey_responses').delete().eq('id', id);
@@ -43,7 +60,12 @@ export default function Responses() {
     <div className="space-y-5">
       <div className="flex flex-wrap items-center gap-3">
         <div className="mr-auto flex items-center gap-3"><h1 className="font-extrabold uppercase text-xl">{rows.length} responden</h1><LiveBadge status={status} /></div>
-        <button onClick={() => downloadCsv(toCsv(rows, qs), `kuesioner-${new Date().toISOString().slice(0, 10)}.csv`)} className="nb-btn nb-btn-sm !bg-lime-300"><Download size={16} strokeWidth={3} /> Export CSV / Excel</button>
+        <select value={sep} onChange={(e) => setSep(e.target.value as CsvDelimiter)} aria-label="Pemisah kolom CSV" className="nb-input !py-1.5 text-xs">
+          <option value=";">Pemisah titik koma (Excel Indonesia)</option>
+          <option value=",">Pemisah koma (Google Sheets)</option>
+        </select>
+        <button onClick={exportCsv} disabled={!rows.length} title={rows.length ? undefined : 'Belum ada jawaban'} className="nb-btn nb-btn-sm !bg-lime-300"><Download size={16} strokeWidth={3} /> Export CSV / Excel</button>
+        {note && <span role="status" className="nb-tag !bg-lime-300 w-full sm:w-auto">{note}</span>}
       </div>
       <div className="nb-card overflow-x-auto">
         <table className="w-full text-sm">
@@ -86,6 +108,7 @@ export default function Responses() {
         </table>
       </div>
       {idx >= 0 && <ResponseDetail rows={rows} index={idx} questions={qs} onClose={() => setOpenId(null)} onNavigate={(i) => setOpenId(rows[i]?.id ?? null)} onDelete={del} />}
+      {dialog}
     </div>
   );
 }

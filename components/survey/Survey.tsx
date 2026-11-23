@@ -169,7 +169,7 @@ function Shell({ children, progress = 0 }: { children: React.ReactNode; progress
     <main className="min-h-screen flex flex-col">
       <div className="h-5 bg-white border-b-[3px] border-black"><div className="h-full bg-yellow-400 border-r-[3px] border-black transition-all duration-500" style={{ width: `${progress * 100}%`, borderRightWidth: progress ? 3 : 0 }} /></div>
       <div className="flex-1 flex items-center justify-center px-4 py-8"><div className="w-full max-w-md">{children}</div></div>
-      <ThemeToggle className="fixed bottom-4 right-4 z-40" />
+      <ThemeToggle className="fixed bottom-4 right-4 z-40" tooltipDirection="top" />
     </main>
   );
 }

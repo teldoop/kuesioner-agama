@@ -49,7 +49,7 @@ export default function Dashboard() {
           <div className="flex flex-wrap items-center gap-2">
             <span className="nb-tag !bg-yellow-300">Q{i + 1}</span>
             <h3 className="font-extrabold">{s.q.title}</h3>
-            <span className="nb-tag !bg-white">{TYPE_LABEL[s.q.question_type]}</span>
+            <span className="nb-tag !bg-white dark:text-black">{TYPE_LABEL[s.q.question_type]}</span>
             {!s.q.is_active && <span className="nb-tag !bg-red-300">Nonaktif</span>}
             <span className="text-xs font-bold ml-auto">{s.n} jawaban</span>
           </div>

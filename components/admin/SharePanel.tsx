@@ -16,14 +16,14 @@ export default function SharePanel({ title, description }: { title: string; desc
   return (
     <section className="nb-card p-4 sm:p-5 space-y-5 bg-yellow-100 dark:bg-white dark:text-black">
       <h2 className="text-lg font-extrabold uppercase">Bagikan Kuesioner Ini</h2>
-      <div className="grid md:grid-cols-2 gap-5 items-start border-[3px] border-black bg-white overflow-hidden shadow-[4px_4px_0_0_var(--ink-c)]">
+      <div className="grid md:grid-cols-2 items-start border-[3px] border-black bg-white overflow-hidden shadow-[4px_4px_0_0_var(--ink-c)]">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <Image
           src="/og"
           alt="Pratinjau gambar kartu"
           width={1200}
           height={630}
-          className="w-full aspect-[1200/630] object-cover bg-yellow-200 border-b-[3px] md:border-none"
+          className="w-full aspect-[1200/630] object-cover bg-yellow-200 border-b-[3px] md:border-r-[3px]"
           onError={(e) => {
             e.currentTarget.style.visibility = 'hidden';
           }}

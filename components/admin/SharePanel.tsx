@@ -23,7 +23,7 @@ export default function SharePanel({ title, description }: { title: string; desc
           alt="Pratinjau gambar kartu"
           width={1200}
           height={630}
-          className="w-full aspect-[1200/630] object-cover bg-yellow-200 border-b-[3px] md:border-r-[3px]"
+          className="w-full aspect-[1200/630] object-cover bg-yellow-200 border-black border-b-[3px] md:border-r-[3px]"
           onError={(e) => {
             e.currentTarget.style.visibility = 'hidden';
           }}

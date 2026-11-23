@@ -21,7 +21,7 @@ export default function SharePanel({ title, description }: { title: string; desc
           <div className="p-3 space-y-1">
             <p className="text-xs font-bold uppercase opacity-70">{SITE_NAME} · {host}</p>
             <p className="font-extrabold leading-snug">{title || SITE_NAME}</p>
-            {description && <p className="text-sm font-medium">{description}</p>}
+            {description && <p className="text-sm font-medium line-clamp-3 md:line-clamp-none">{description}</p>}
             <Link href="/admin/questions" className="nb-btn nb-btn-sm !bg-pink-300"><Pencil size={14} strokeWidth={3} /> Ubah di Pengaturan Umum</Link>
           </div>
       </div>

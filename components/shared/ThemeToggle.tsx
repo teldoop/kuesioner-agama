@@ -9,7 +9,7 @@ type TooltipDirection = 'top' | 'bottom';
 const OPTS = [
   ['light', 'Terang', Sun],
   ['dark', 'Gelap', Moon],
-  ['system', 'Ikuti sistem', Monitor],
+  ['system', 'Sistem', Monitor],
 ] as const;
 
 const apply = (m: Mode) => {

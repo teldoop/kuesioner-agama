@@ -27,7 +27,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     <div className="min-h-screen">
       <header className="bg-yellow-300 border-b-[3px] border-black sticky top-0 z-20">
         <div className="max-w-6xl mx-auto px-4 py-3 flex items-center gap-3">
-          <b className="uppercase font-extrabold whitespace-nowrap mr-2">Admin Survei</b>
+          <b className="uppercase font-extrabold whitespace-nowrap mr-2">Admin Kuesioner</b>
           <nav className="hidden md:flex items-center gap-3">{TABS.map(([h, l, I]) => tab(h, l, I))}</nav>
           {/* Mobile: hamburger, user, notifikasi. Desktop: tema, user, notifikasi */}
           <div className="ml-auto flex items-center gap-3">

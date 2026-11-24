@@ -2,7 +2,8 @@ import type { Question, ResponseRow } from './types';
 import { cardKey, cards, normOpts, points, sliderItems } from './qutil';
 
 export type CsvDelimiter = ';' | ',';
-type Col = { h: string; get: (r: ResponseRow) => string | number };
+export type Col = { h: string; get: (r: ResponseRow) => string | number };
+export type ExportOpts = { extra?: Col[]; idLabel?: string | null };
 
 const one = (s: string) => String(s ?? '').replace(/\s+/g, ' ').trim();
 const pad = (n: number) => String(n).padStart(2, '0');
@@ -25,13 +26,14 @@ function cell(v: string | number): string {
  * - kolom "Lainnya" muncul jika opsinya aktif sekarang atau pernah dipakai;
  * - pertanyaan yang sudah dihapus tidak ikut.
  */
-export function exportColumns(rows: ResponseRow[], qs: Question[]) {
+export function exportColumns(rows: ResponseRow[], qs: Question[], opts: ExportOpts = {}) {
   const ans = (q: Question) => rows.map((r) => r.answers?.[q.id]).filter((a) => a != null);
   const used = qs.filter((q) => q.is_active || ans(q).length > 0);
   const cols: Col[] = [
     { h: 'Waktu', get: (r) => fmtTime(r.created_at) },
-    { h: 'ID Responden', get: (r) => r.session_id },
+    ...(opts.idLabel === null ? [] : [{ h: opts.idLabel ?? 'ID Responden', get: (r: ResponseRow) => r.session_id }]),
     { h: 'Durasi (detik)', get: (r) => r.duration_seconds },
+    ...(opts.extra ?? []),
   ];
   used.forEach((q, i) => {
     const base = `Q${i + 1}${q.is_active ? '' : ' [nonaktif]'}: ${one(q.title)}`;
@@ -75,8 +77,8 @@ export function exportColumns(rows: ResponseRow[], qs: Question[]) {
   return { cols, used };
 }
 
-export function buildCsv(rows: ResponseRow[], qs: Question[], delimiter: CsvDelimiter = ';') {
-  const { cols, used } = exportColumns(rows, qs);
+export function buildCsv(rows: ResponseRow[], qs: Question[], delimiter: CsvDelimiter = ';', opts: ExportOpts = {}) {
+  const { cols, used } = exportColumns(rows, qs, opts);
   const sorted = [...rows].sort((x, y) => +new Date(x.created_at) - +new Date(y.created_at)); // urut dari yang paling awal
   const lines = [cols.map((c) => cell(c.h)).join(delimiter), ...sorted.map((r) => cols.map((c) => cell(c.get(r))).join(delimiter))];
   return { csv: '\uFEFF' + lines.join('\r\n'), responses: rows.length, questions: used.length, columns: cols.length }; // BOM agar Excel membaca UTF-8

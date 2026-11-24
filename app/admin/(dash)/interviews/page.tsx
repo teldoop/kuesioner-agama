@@ -139,7 +139,7 @@ export default function Interviews() {
       <div className="flex items-center gap-3"><h1 className="text-2xl font-extrabold uppercase mr-auto flex items-center gap-2"><Mic size={24} strokeWidth={3} /> Wawancara</h1><LiveBadge status={status} /></div>
       {loadErr && <p role="alert" className="nb-card p-4 font-bold bg-red-300">{loadErr}</p>}
 
-      <section className="nb-card p-4 space-y-4 bg-yellow-100">
+      <section className="nb-card p-4 space-y-4 bg-yellow-100 dark:bg-white dark:text-black">
         <h2 className="font-extrabold uppercase">Jenis Wawancara</h2>
         <div className="flex flex-wrap gap-2">
           {cats.map((c) => (
@@ -150,7 +150,7 @@ export default function Interviews() {
           {!cats.length && <p className="text-sm font-bold">Belum ada jenis wawancara. Tambahkan yang pertama di bawah.</p>}
         </div>
         <div className="flex flex-wrap gap-2">
-          <input className={`${inp} flex-1 min-w-[10rem]`} placeholder="Nama jenis baru, mis. Mahasiswa, Pedagang UMKM, Tokoh Agama" value={newName}
+          <input className={`${inp} flex-1 min-w-[10rem]`} value={newName}
             onChange={(e) => setNewName(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && addCat()} />
           <button onClick={addCat} className="nb-btn nb-btn-sm"><Plus size={16} strokeWidth={3} /> Tambah Jenis</button>
         </div>

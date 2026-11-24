@@ -1,7 +1,10 @@
 'use client';
 import { useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { ArrowLeft, ArrowRight, CalendarDays, Clock, Trash2, X } from 'lucide-react';
-import type { Question, ResponseRow } from '@/lib/types';
+import type { Question } from '@/lib/types';
+
+export type DetailRow = { id: string; created_at: string; duration_seconds: number; answers: Record<string, any> };
 import { cardKey, cards as getCards, normOpts, points, sliderItems } from '@/lib/qutil';
 
 const fmtDur = (s: number) => (s < 60 ? `${s} detik` : `${Math.floor(s / 60)} mnt ${s % 60} dtk`);
@@ -95,9 +98,10 @@ function Answer({ q, a }: { q: Question; a: any }) {
   }
 }
 
-export default function ResponseDetail({ rows, index, questions, onClose, onNavigate, onDelete }: {
-  rows: ResponseRow[]; index: number; questions: Question[];
+export default function ResponseDetail({ rows, index, questions, onClose, onNavigate, onDelete, title = 'Detail Jawaban', renderExtra }: {
+  rows: DetailRow[]; index: number; questions: Question[];
   onClose: () => void; onNavigate: (i: number) => void; onDelete: (id: string) => void;
+  title?: string; renderExtra?: (r: DetailRow) => React.ReactNode;
 }) {
   const r = rows[index];
   const closeRef = useRef<HTMLButtonElement>(null);
@@ -115,16 +119,16 @@ export default function ResponseDetail({ rows, index, questions, onClose, onNavi
     return () => { document.removeEventListener('keydown', key); document.body.style.overflow = prev; };
   }, [index, rows.length]); // eslint-disable-line
 
-  if (!r) return null;
+  if (!r || typeof document === 'undefined') return null;
   const answered = questions.filter((q) => r.answers?.[q.id] != null).length;
-  return (
-    <div className="fixed inset-0 bg-neutral-950/60 flex items-end md:items-center justify-center p-0 !mt-0 md:p-4 z-40" onClick={onClose}>
+  return createPortal(
+    <div className="fixed inset-0 !m-0 bg-neutral-950/60 flex items-end md:items-center justify-center p-0 md:p-4 z-40" onClick={onClose}>
       <div role="dialog" aria-modal="true" aria-labelledby="detail-title"
         className="nb-card w-full max-w-xl max-h-[92vh] md:max-h-[85vh] flex flex-col" onClick={(e) => e.stopPropagation()}>
         {/* Kepala */}
         <div className="p-4 border-b-[3px] border-black space-y-3 shrink-0">
           <div className="flex items-center gap-2">
-            <h2 id="detail-title" className="font-extrabold uppercase mr-auto">Detail Jawaban</h2>
+            <h2 id="detail-title" className="font-extrabold uppercase mr-auto">{title}</h2>
             <button onClick={() => onNavigate(index - 1)} disabled={index === 0} className="nb-btn nb-btn-sm !bg-white !px-2" aria-label="Jawaban lebih baru" title="Lebih baru"><ArrowLeft size={16} strokeWidth={3} /></button>
             <span className="text-sm font-extrabold tabular-nums">{index + 1} / {rows.length}</span>
             <button onClick={() => onNavigate(index + 1)} disabled={index === rows.length - 1} className="nb-btn nb-btn-sm !bg-white !px-2" aria-label="Jawaban lebih lama" title="Lebih lama"><ArrowRight size={16} strokeWidth={3} /></button>
@@ -135,6 +139,7 @@ export default function ResponseDetail({ rows, index, questions, onClose, onNavi
             <span className="nb-tag !bg-sky-300"><Clock size={14} strokeWidth={3} /> Mengisi selama {fmtDur(r.duration_seconds)}</span>
             <span className="nb-tag !bg-lime-300">{answered} dari {questions.length} pertanyaan terjawab</span>
           </div>
+          {renderExtra?.(r)}
         </div>
 
         {/* Isi */}
@@ -157,6 +162,7 @@ export default function ResponseDetail({ rows, index, questions, onClose, onNavi
           <button onClick={onClose} className="nb-btn nb-btn-sm !bg-white ml-auto">Tutup</button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
